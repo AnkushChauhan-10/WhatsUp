@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.example.whatsup.R
 import com.example.whatsup.adapter.FragmentAdapter
 import com.example.whatsup.databinding.FragmentDashBordBinding
@@ -53,6 +54,7 @@ class DashBordFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.setting_button->{
+                    settings()
                     true
                 }
                 R.id.logOut->{
@@ -63,6 +65,10 @@ class DashBordFragment : Fragment() {
             }
         }
         popupMenu.show()
+    }
+
+    private fun settings() {
+        findNavController().navigate(DashBordFragmentDirections.actionDashBordFragmentToSettingsFragment())
     }
 
     private fun logOut() {

@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:padding="10dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/chatDP"
-        android:layout_weight="0"
         android:layout_marginEnd="5dp"
         android:src="@drawable/ic_baseline_perm_identity_24"
         android:background="@drawable/circuler_image_shape"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
 
     <LinearLayout
         android:id="@+id/chatClick"
         android:orientation="vertical"
         android:layout_weight="2"
+        android:gravity="center_vertical"
         android:layout_marginEnd="5dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">

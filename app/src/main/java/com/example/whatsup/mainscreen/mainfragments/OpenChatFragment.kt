@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.whatsup.FirebaseAppliction
 import com.example.whatsup.adapter.MessageAdapter
 import com.example.whatsup.databinding.FragmentOpenChatBinding
@@ -18,6 +20,7 @@ import com.example.whatsup.model.MessageModel
 import com.example.whatsup.model.UserData
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
+import com.google.firebase.storage.FirebaseStorage
 import java.security.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,6 +39,16 @@ class OpenChatFragment : Fragment() {
         )
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this,object :OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                findNavController().navigate(OpenChatFragmentDirections.actionOpenChatFragment2ToDashBordFragment())
+            }
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,14 +60,20 @@ class OpenChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter()
-        //viewModel.getMessageFlow(viewModel.currentUserData.value?.phoneNo.toString(),args.chatePhone)
-
         binding.backArrow.setOnClickListener{
             findNavController().navigate(OpenChatFragmentDirections.actionOpenChatFragment2ToDashBordFragment())
         }
 
         binding.sendButton.setOnClickListener {
             sendMessage()
+        }
+
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(args.chatePhone)
+        storageReference.downloadUrl.addOnSuccessListener {
+            Glide.with(requireContext())
+                .load(it).circleCrop()
+                .into(binding.openChatDp)
+            Log.i("DownloadUri",it.toString())
         }
 
     }
@@ -74,6 +93,7 @@ class OpenChatFragment : Fragment() {
         var j=0
         viewModel.m.observe(viewLifecycleOwner){
             adapter.update(it)
+            rec.scrollToPosition(it.size-1)
             Log.i("DATASNAP j",j++.toString())
             viewModel.setMessageSeen(args.chatePhone,viewModel.currentUserData.value?.phoneNo.toString())
         }
@@ -103,11 +123,9 @@ class OpenChatFragment : Fragment() {
     }
 
     fun keyGen():String{
-        val calendar = Calendar.getInstance()
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aaa")
-        val dateTime = simpleDateFormat.format(calendar.time).toString()
-        Log.i("genKey",dateTime)
-        return dateTime
+        val ts = System.currentTimeMillis()/1000
+        Log.i("TimeStamp key",ts.toString())
+        return ts.toString()
     }
 
 }

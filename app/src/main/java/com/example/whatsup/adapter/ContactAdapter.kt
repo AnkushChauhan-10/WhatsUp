@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.whatsup.R
 import com.example.whatsup.model.ContactsModel
+import com.google.firebase.storage.FirebaseStorage
 
 class ContactAdapter(private val context: Context):
     RecyclerView.Adapter<ContactAdapter.ContactHolder>() {
@@ -29,6 +32,7 @@ class ContactAdapter(private val context: Context):
 
     inner class ContactHolder(view: View, listener: ListAdapterListener):RecyclerView.ViewHolder(view){
         val name = view.findViewById<TextView>(R.id.contactName)
+        val dp = view.findViewById<ImageView>(R.id.contactDP)
         val layout = view.findViewById<LinearLayout>(R.id.contactClick)
 
         init {
@@ -45,6 +49,13 @@ class ContactAdapter(private val context: Context):
 
     override fun onBindViewHolder(holder: ContactHolder, position: Int) {
         val current = contactList[position]
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(current.phone.toString())
+        storageReference.downloadUrl.addOnSuccessListener {
+            Glide.with(context)
+                .load(it).circleCrop()
+                .into(holder.dp)
+            Log.i("DownloadUri",it.toString())
+        }
         holder.name.text = current.name
     }
 

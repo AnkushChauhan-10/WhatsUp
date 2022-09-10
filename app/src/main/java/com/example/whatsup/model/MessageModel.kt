@@ -5,7 +5,7 @@ data class MessageModel(
     val senderPhone:String?="",
     val receiverName:String?="",
     val receiverPhone: String?="",
-    val time: String?="",
+    var time: String?="",
     val msg: String?="",
     val seen:Boolean?=false,
     val key: String?=" ")

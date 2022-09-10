@@ -14,7 +14,12 @@
             app:destination="@id/contactListFragment" />
         <action
             android:id="@+id/action_dashBordFragment_to_openChatFragment2"
-            app:destination="@id/openChatFragment2" />
+            app:destination="@id/openChatFragment2"
+            app:popUpTo="@id/dashBordFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_dashBordFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactListFragment"
@@ -35,7 +40,7 @@
         <action
             android:id="@+id/action_openChatFragment2_to_dashBordFragment"
             app:destination="@id/dashBordFragment"
-            app:launchSingleTop="true"
+            app:launchSingleTop="false"
             app:popUpTo="@id/openChatFragment2"
             app:popUpToInclusive="true" />
         <argument
@@ -45,4 +50,18 @@
             android:name="chatePhone"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

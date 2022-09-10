@@ -122,9 +122,10 @@ class SingInFragment : Fragment() {
         when (requestCode) {
             REQUEST_READ_CONTACTS -> {
                 if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
-
+                    Log.i("permission","Dede")
                 } else {
-
+                    Log.i("permission","Denide")
+                    activity?.finish()
                 }
                 return
             }

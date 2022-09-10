@@ -3,6 +3,7 @@ package com.example.whatsup.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.contentValuesOf
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.whatsup.R
 import com.example.whatsup.model.UserData
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import java.sql.Date
+import java.sql.Time
+import java.text.SimpleDateFormat
 
 class ChatsAdapter(private val context: Context):
     RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
@@ -54,10 +61,26 @@ class ChatsAdapter(private val context: Context):
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ChatsHolder, position: Int) {
+
         val current = chatsList[position]
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(current.phoneNo)
+        storageReference.downloadUrl.addOnSuccessListener {
+            Glide.with(context)
+                .load(it).circleCrop()
+                .into(holder.dp)
+            Log.i("DownloadUri",it.toString())
+        }
+        val timeFormat = SimpleDateFormat("hh:mm aaa")
+        val time = Date(current.time.toString().toLong()*1000)
+        timeFormat.format(time)
         holder.name.text = current.userName
         holder.lastMsg.text = current.lastMeg
-        holder.time.text = current.time
+        holder.time.text = timeFormat.format(time).toString()
+        if(current.count != 0){
+            holder.count.text = current.count.toString()
+            holder.count.setBackgroundResource(R.drawable.message_count_circle)
+            holder.time.setTextColor(R.color.purple_500)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +89,8 @@ class ChatsAdapter(private val context: Context):
 
     fun upDate(newList: List<UserData>){
         chatsList.clear()
-        chatsList.addAll(newList)
+        Log.i("newList",newList.toString())
+        chatsList.addAll(newList.sortedByDescending { it.time.toString().toInt() })
         notifyDataSetChanged()
     }
 

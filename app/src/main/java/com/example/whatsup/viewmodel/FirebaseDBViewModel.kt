@@ -1,5 +1,6 @@
 package com.example.whatsup.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
@@ -16,14 +17,13 @@ class FirebaseDBViewModel(private val repository: FirebaseDB): ViewModel(){
 
 
     val usersPhone : LiveData<List<ContactsModel>> = repository.usersPhone
-    val usersChats : LiveData<List<String>> = repository.usersChats
     val currentUserData : LiveData<User> = repository.currentUserData
     val m = MutableLiveData<List<MessageModel>>()
     val chats: LiveData<List<UserData>> = repository.chatsModel
 
     fun getAllContactsList(){
-        repository.getList()
-        Log.i("LiveList",repository.usersPhone.value.toString())
+            repository.getList()
+            Log.i("LiveList",repository.usersPhone.value.toString())
     }
 
     fun sendMessage(messageModel: MessageModel){
@@ -45,19 +45,9 @@ class FirebaseDBViewModel(private val repository: FirebaseDB): ViewModel(){
     }
 
     fun getChats(string: String){
-        repository.getChats(string)
-        /*    viewModelScope.launch {
-           repository.getChatFlow(string).collect{
-               when{
-                   it.isSuccess ->{
-                       chats.value = it.getOrNull()
-                   }
-                   it.isFailure -> {
-                       it.exceptionOrNull()?.printStackTrace()
-                   }
-               }
-           }
-       }*/
+        viewModelScope.launch {
+            repository.getChats(string)
+        }
     }
 
 
@@ -70,6 +60,9 @@ class FirebaseDBViewModel(private val repository: FirebaseDB): ViewModel(){
         }
     }
 
+    fun uploadPhoto(uri: Uri){
+        repository.uploadImage(uri)
+    }
 
 init {
     getUserData()

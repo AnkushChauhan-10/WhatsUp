@@ -53,8 +53,6 @@ class ContactListFragment : Fragment() {
             == PackageManager.PERMISSION_GRANTED) {
             viewModel.getAllContactsList()
             Log.i("1per","permiss")
-        } else {
-            requestPermission()
         }
 
 
@@ -74,49 +72,4 @@ class ContactListFragment : Fragment() {
         })
 
     }
-
-    private fun requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.READ_CONTACTS
-            )
-        ) {
-            // show UI part if you want here to show some rationale !!!
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.READ_CONTACTS),
-                REQUEST_READ_CONTACTS
-            )
-        }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.READ_CONTACTS
-            )
-        ) {
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.READ_CONTACTS),
-                REQUEST_READ_CONTACTS
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            REQUEST_READ_CONTACTS -> {
-                if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
-                    viewModel.getAllContactsList()
-                } else {
-
-                }
-                return
-            }
-        }
-    }
-
-
 }

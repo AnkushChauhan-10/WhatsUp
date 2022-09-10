@@ -3,9 +3,11 @@ package com.example.whatsup.firebaserpository
 import android.annotation.SuppressLint
 import android.app.Application
 import android.graphics.ImageDecoder.ImageInfo
+import android.net.Uri
 import android.os.Message
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.whatsup.model.*
@@ -13,10 +15,12 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
+import java.security.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -25,6 +29,7 @@ import kotlin.collections.ArrayList
 class FirebaseDB(val application: Application){
 
    val database = Firebase.database
+   val storage = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").reference
    val allContactList = ArrayList<ContactsModel>()
 
 init {
@@ -106,38 +111,41 @@ init {
       }
    }
 //--------------------------------------------------------------------------------------------------------------------------
-
-   private val _usersChat = MutableLiveData<List<String>>()
-   val usersChats : LiveData<List<String>> = _usersChat
    fun sendMessage(messageModel: MessageModel?){
+   Log.i("countCheck","existjnjn")
       val db = database.getReference("Users").child(messageModel?.senderPhone.toString())
       db.child("chats").child(messageModel?.receiverPhone.toString()).get().addOnSuccessListener {
          if(it.exists()){
             val db1 = database.getReference("Users").child(messageModel?.senderPhone.toString()).child("chats")
             db1.child(messageModel?.receiverPhone.toString()).child("lastMeg").setValue(messageModel?.msg)
-            db1.child(messageModel?.receiverPhone.toString()).child("time").setValue(messageModel?.time)
+            db1.child(messageModel?.receiverPhone.toString()).child("time").setValue(messageModel?.key)
+            db1.child(messageModel?.receiverPhone.toString()).child("phoneNo").setValue(messageModel?.receiverPhone)
 
             val db2 = database.getReference("Users").child(messageModel?.receiverPhone.toString()).child("chats")
             db2.child(messageModel?.senderPhone.toString()).child("lastMeg").setValue(messageModel?.msg)
-            db2.child(messageModel?.senderPhone.toString()).child("time").setValue(messageModel?.time)
+            db2.child(messageModel?.senderPhone.toString()).child("time").setValue(messageModel?.key)
+            db2.child(messageModel?.senderPhone.toString()).child("phoneNo").setValue(messageModel?.senderPhone)
+            Log.i("count Check","exist")
          }else{
             val db1 = database.getReference("Users").child(messageModel?.senderPhone.toString()).child("chats")
             db1.child(messageModel?.receiverPhone.toString()).
             setValue(ChatsModel(messageModel?.receiverPhone.toString(),
-               messageModel?.msg.toString(),messageModel?.time.toString()))
+               messageModel?.msg.toString(),messageModel?.key.toString()))
 
 
             val db2 = database.getReference("Users").child(messageModel?.receiverPhone.toString()).child("chats")
             db2.child(messageModel?.senderPhone.toString()).
             setValue(ChatsModel(messageModel?.senderPhone.toString(),
-               messageModel?.msg.toString(),messageModel?.time.toString()))
+               messageModel?.msg.toString(),messageModel?.key.toString()))
+
+            Log.i("count Check","not exist")
          }
+         createChats(messageModel)
       }
-      createChats(messageModel)
    }
 
    fun createChats(messageModel: MessageModel?){
-
+      var count = 1
       //user---------------------------------------------
       val db1 = database.getReference("Users").child(messageModel?.senderPhone.toString())
       db1.child("Messages").child(messageModel?.receiverPhone.toString()).child(messageModel?.key.toString()).
@@ -148,6 +156,18 @@ init {
       db2.child("Messages").child(messageModel?.senderPhone.toString()).child(messageModel?.key.toString()).
       setValue(messageModel)
 
+      Log.i("count Check","chat")
+      //Message Count
+      database.getReference("Users").child(messageModel?.receiverPhone.toString()).child("chats").child(messageModel?.senderPhone.toString())
+         .child("count").get().addOnSuccessListener {
+            count+=it.value.toString().toInt()
+            database.getReference("Users").child(messageModel?.receiverPhone.toString()).child("chats").child(messageModel?.senderPhone.toString())
+               .child("count").setValue(count)
+            Log.i("Count new","suc"+count)
+         }.addOnFailureListener {
+            Log.i("Count new","fail")
+         }
+      Log.i("Count new","suc"+count)
    }
 //------------------------------------------------------------------Read message----------------------------
 
@@ -167,39 +187,21 @@ init {
             this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
          }
       }
-
+      Log.i("chats12","12")
       database.getReference("Users").child(senderPhone).child("Messages").child(chatPhone).
               addValueEventListener(messageListener)
       awaitClose {
+         Log.i("chats12","12")
          database.getReference("Users").child(senderPhone).child("Messages").child(chatPhone).
          removeEventListener(messageListener)
       }
    }
    //---------------------------------------------------------CHATS------------------------------------------------------
-
-   fun getChatsFlow(user: String) = callbackFlow<Result<List<UserChatsModel>>>{
-      val chatsListener = object  : ValueEventListener{
-         override fun onDataChange(snapshot: DataSnapshot) {
-            val chats = snapshot.children.map {ds ->
-               ds.getValue(UserChatsModel::class.java)
-            }
-            this@callbackFlow.trySendBlocking(Result.success(chats.filterNotNull()))
-         }
-
-         override fun onCancelled(error: DatabaseError) {
-            this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
-         }
-      }
-      database.getReference("Users").child(user).child("chats").addValueEventListener(chatsListener)
-      awaitClose{
-         database.getReference("Users").child(user).child("chats").removeEventListener(chatsListener)
-      }
-   }
-
    val _chatsModel = MutableLiveData<List<UserData>>()
    val chatsModel : LiveData<List<UserData>> = _chatsModel
 
-   fun getChats(user: String){
+    fun getChats(user: String){
+      // getDpUri(user)
       val db = database.getReference("Users").child(user).child("chats")
       db.addValueEventListener(object :ValueEventListener{
          override fun onDataChange(snapshot: DataSnapshot) {
@@ -209,7 +211,8 @@ init {
                   dataSnapshot.child("phoneNo").value.toString(),
                   " ",
                   dataSnapshot.child("lastMeg").value.toString(),
-               dataSnapshot.child("time").value.toString()))
+                  dataSnapshot.child("time").value.toString(),
+                  dataSnapshot.child("count").value.toString().toInt()))
                _chatsModel.value = list
             }
             Log.i("chats1",list.toString())
@@ -221,6 +224,16 @@ init {
       })
    }
 
+   private fun getDpUri(user:String){
+      var uri = ""
+      database.getReference("Users").child(user).child("UserData")
+         .child("profilepic").get().addOnSuccessListener {
+           val db = database.getReference("User").child(_currentUserData.value?.phoneNo.toString())
+              .child("chats").child(user).child("profilepic")
+            db.setValue(it)
+         }
+   }
+
    private fun findContact(phoneNo : String): String{
       for (num in allContactList ){
          if(num.phone == phoneNo){
@@ -230,32 +243,30 @@ init {
       return phoneNo
    }
 
-//--------------------------------------------------------------------------------------------------------
-   fun getMessage(user:String,receiver:String):Int{
-      var i=0;
-      val db = database.getReference("Users").child(user).child("Messages").child(receiver)
-      db.addValueEventListener(object : ValueEventListener{
-         override fun onDataChange(snapshot: DataSnapshot) {
-               for (ds in snapshot.children){
-                  if(ds.child("seen").value==false){
-                     i++;
-                  }
-               }
-         }
-
-         override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
-         }
-      })
-      return i
-   }
 //---------------------------------------------------------------------------------------------
    fun changeSeen(sender:String,receiver:String,key:String){
       database.getReference("Users").child(sender).child("Messages").child(receiver).child(key).
               child("seen").setValue(true)
       database.getReference("Users").child(receiver).child("Messages").child(sender).child(key).
             child("seen").setValue(true)
-      Log.i("Keyyyy2",key.toString())
+      database.getReference("Users").child(receiver).child("chats").child(sender).
+            child("count").setValue(0)
+   }
+//------------------------------------PROFILE PIC-----------------------------------------------------
+   fun uploadImage(filePath: Uri){
+      if(filePath != null){
+         val ref = storage?.child(_currentUserData.value?.phoneNo.toString())
+         ref?.putFile(filePath!!)?.onSuccessTask {
+            it.storage.downloadUrl.addOnSuccessListener {
+               setDPURI(it.toString())
+            }
+         }
+      }else{
+      }
    }
 
+   private fun setDPURI(URI: String) {
+      database.getReference("Users").child(_currentUserData.value?.phoneNo.toString()).child("UserData")
+         .child("profilepic").setValue(URI)
+   }
 }
