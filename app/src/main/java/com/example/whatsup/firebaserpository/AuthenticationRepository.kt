@@ -10,6 +10,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AuthenticationRepository(private val context: Context) {
 
@@ -42,8 +45,9 @@ class AuthenticationRepository(private val context: Context) {
                 var user = User(userName,email,password, phoneNo)
                 dataBaseReference = FirebaseDatabase.getInstance("https://whats-up-1e69b-default-rtdb.firebaseio.com/")
                     .getReference("Users")
-                dataBaseReference.child(phoneNo).child("UserData").setValue(user)
-
+                GlobalScope.launch(Dispatchers.IO) {
+                    dataBaseReference.child(phoneNo).child("UserData").setValue(user)
+                }
             }else{
                 loggedIn.value = false
             }

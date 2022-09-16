@@ -29,6 +29,7 @@ class ChatsAdapter(private val context: Context):
 
     interface ListAdapterListener{
         fun onClickChat(chat: String,phone: String)
+        fun onClickDp(name:String?,uri:String?)
     }
 
 
@@ -50,6 +51,9 @@ class ChatsAdapter(private val context: Context):
             layout.setOnClickListener {
                 listener.onClickChat(chatsList[adapterPosition].userName,chatsList[adapterPosition].phoneNo)
             }
+            dp.setOnClickListener {
+                listener.onClickDp(chatsList[adapterPosition].userName,chatsList[adapterPosition].phoneNo)
+            }
         }
 
     }
@@ -63,7 +67,8 @@ class ChatsAdapter(private val context: Context):
     override fun onBindViewHolder(holder: ChatsHolder, position: Int) {
 
         val current = chatsList[position]
-        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(current.phoneNo)
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
+            .getReference("${current.phoneNo}/DP")
         storageReference.downloadUrl.addOnSuccessListener {
             Glide.with(context)
                 .load(it).circleCrop()

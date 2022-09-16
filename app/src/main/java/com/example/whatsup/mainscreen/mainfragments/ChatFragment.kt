@@ -76,6 +76,10 @@ class ChatFragment : Fragment() {
             override fun onClickChat(chat: String,phone: String) {
                 findNavController().navigate(DashBordFragmentDirections.actionDashBordFragmentToOpenChatFragment2(chat,phone))
             }
+            override fun onClickDp(name: String?, uri: String?) {
+                findNavController().navigate(DashBordFragmentDirections.actionDashBordFragmentToFullImageFragment(
+                    name.toString(),uri.toString()))
+            }
         })
     }
 

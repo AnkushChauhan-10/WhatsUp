@@ -21,6 +21,7 @@ class ContactAdapter(private val context: Context):
 
     interface ListAdapterListener{
         fun onClickContact(chat: String?,phone: String?)
+
     }
 
 
@@ -49,12 +50,19 @@ class ContactAdapter(private val context: Context):
 
     override fun onBindViewHolder(holder: ContactHolder, position: Int) {
         val current = contactList[position]
-        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(current.phone.toString())
+        try{
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
+            .getReference("${current.phone}/DP")
         storageReference.downloadUrl.addOnSuccessListener {
-            Glide.with(context)
+            try{Glide.with(context)
                 .load(it).circleCrop()
                 .into(holder.dp)
-            Log.i("DownloadUri",it.toString())
+            Log.i("DownloadUri",it.toString())}
+            catch (e:Exception){
+                Log.i("ContactExp",e.toString())
+            }
+        }}catch (e:Exception){
+            Log.i("ContactExp1",e.toString())
         }
         holder.name.text = current.name
     }

@@ -44,12 +44,15 @@ class SettingsFragment : Fragment() {
         binding.profileLayoutClick.setOnClickListener {
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToProfileFragment())
         }
-        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(viewModel.currentUserData.value?.phoneNo.toString())
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
+            .getReference("${viewModel.currentUserData.value?.phoneNo.toString()}/DP")
         storageReference.downloadUrl.addOnSuccessListener {
-            Glide.with(requireContext())
+            try{Glide.with(requireContext())
                 .load(it).circleCrop()
                 .into(binding.settingDp)
-            Log.i("DownloadUri",it.toString())
+            Log.i("DownloadUri",it.toString())}catch (e:Exception){
+                Log.i("DownloadUri",e.toString())
+            }
         }
         binding.settingName.text = viewModel.currentUserData.value?.userName.toString()
     }

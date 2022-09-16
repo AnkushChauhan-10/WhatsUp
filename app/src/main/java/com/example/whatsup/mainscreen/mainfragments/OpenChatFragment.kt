@@ -68,12 +68,17 @@ class OpenChatFragment : Fragment() {
             sendMessage()
         }
 
-        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(args.chatePhone)
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
+            .getReference("${args.chatePhone}/DP")
         storageReference.downloadUrl.addOnSuccessListener {
+            try{
             Glide.with(requireContext())
                 .load(it).circleCrop()
                 .into(binding.openChatDp)
-            Log.i("DownloadUri",it.toString())
+            Log.i("DownloadUri",it.toString())}
+            catch (e:Exception){
+                Log.i("OpenchatExp",e.toString())
+            }
         }
 
     }

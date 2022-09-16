@@ -11,11 +11,13 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.whatsup.model.*
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
@@ -96,7 +98,6 @@ init {
 
    fun getUserData(string: String){
       val dataBaseReference = database.getReference("Users").child(string)
-
       dataBaseReference.child("UserData").get().addOnSuccessListener {
          if(it.exists()){
            var user = User(it.child("userName").value.toString(),
@@ -125,18 +126,20 @@ init {
             db2.child(messageModel?.senderPhone.toString()).child("lastMeg").setValue(messageModel?.msg)
             db2.child(messageModel?.senderPhone.toString()).child("time").setValue(messageModel?.key)
             db2.child(messageModel?.senderPhone.toString()).child("phoneNo").setValue(messageModel?.senderPhone)
+
+
             Log.i("count Check","exist")
          }else{
             val db1 = database.getReference("Users").child(messageModel?.senderPhone.toString()).child("chats")
             db1.child(messageModel?.receiverPhone.toString()).
             setValue(ChatsModel(messageModel?.receiverPhone.toString(),
-               messageModel?.msg.toString(),messageModel?.key.toString()))
+               messageModel?.msg.toString(),messageModel?.key.toString(),0))
 
 
             val db2 = database.getReference("Users").child(messageModel?.receiverPhone.toString()).child("chats")
             db2.child(messageModel?.senderPhone.toString()).
             setValue(ChatsModel(messageModel?.senderPhone.toString(),
-               messageModel?.msg.toString(),messageModel?.key.toString()))
+               messageModel?.msg.toString(),messageModel?.key.toString(),0))
 
             Log.i("count Check","not exist")
          }
@@ -188,10 +191,9 @@ init {
          }
       }
       Log.i("chats12","12")
-      database.getReference("Users").child(senderPhone).child("Messages").child(chatPhone).
-              addValueEventListener(messageListener)
+     database.getReference("Users").child(senderPhone).child("Messages").child(chatPhone).
+     addValueEventListener(messageListener)
       awaitClose {
-         Log.i("chats12","12")
          database.getReference("Users").child(senderPhone).child("Messages").child(chatPhone).
          removeEventListener(messageListener)
       }
@@ -201,7 +203,6 @@ init {
    val chatsModel : LiveData<List<UserData>> = _chatsModel
 
     fun getChats(user: String){
-      // getDpUri(user)
       val db = database.getReference("Users").child(user).child("chats")
       db.addValueEventListener(object :ValueEventListener{
          override fun onDataChange(snapshot: DataSnapshot) {
@@ -222,16 +223,6 @@ init {
             TODO("Not yet implemented")
          }
       })
-   }
-
-   private fun getDpUri(user:String){
-      var uri = ""
-      database.getReference("Users").child(user).child("UserData")
-         .child("profilepic").get().addOnSuccessListener {
-           val db = database.getReference("User").child(_currentUserData.value?.phoneNo.toString())
-              .child("chats").child(user).child("profilepic")
-            db.setValue(it)
-         }
    }
 
    private fun findContact(phoneNo : String): String{
@@ -255,7 +246,7 @@ init {
 //------------------------------------PROFILE PIC-----------------------------------------------------
    fun uploadImage(filePath: Uri){
       if(filePath != null){
-         val ref = storage?.child(_currentUserData.value?.phoneNo.toString())
+         val ref = storage?.child(_currentUserData.value?.phoneNo.toString())?.child("DP")
          ref?.putFile(filePath!!)?.onSuccessTask {
             it.storage.downloadUrl.addOnSuccessListener {
                setDPURI(it.toString())

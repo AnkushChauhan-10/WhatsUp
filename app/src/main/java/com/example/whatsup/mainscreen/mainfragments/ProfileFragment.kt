@@ -55,12 +55,16 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com").getReference(viewModel.currentUserData.value?.phoneNo.toString())
+        val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
+            .getReference("${viewModel.currentUserData.value?.phoneNo.toString()}/DP")
         storageReference.downloadUrl.addOnSuccessListener {
+            try{
             Glide.with(requireContext())
                 .load(it).circleCrop()
                 .into(binding.imageProfile)
-            Log.i("DownloadUri",it.toString())
+            Log.i("DownloadUri",it.toString())}catch (e:Exception){
+                Log.i("DownloadUri",e.toString())
+            }
         }
         binding.imageProfile.setOnClickListener {
             openGallery()

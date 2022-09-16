@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".mainscreen.mainfragments.StatusFragment">
 
+    <LinearLayout
+        android:id="@+id/setStatusLayout"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/statusProfile"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="4dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/circuler_image_shape"
+                android:src="@drawable/ic_baseline_perm_identity_24" />
+
+            <ImageView
+                android:id="@+id/addButtonImg"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignRight="@+id/statusProfile"
+                android:layout_alignBottom="@+id/statusProfile"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/circuler_image_shape"
+                android:padding="5dp"
+                android:src="@drawable/ic_baseline_add_24" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/statusName"
+                android:textSize="20dp"
+                android:text="My Status"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/sending"
+                android:textColor="@color/black"
+                android:text="Tap to add status update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:text="New Status"
+        android:textSize="10dp"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statusRec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="93dp"
+        android:layout_height="78dp"
+        android:layout_margin="100dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible"/>
+
+</LinearLayout>

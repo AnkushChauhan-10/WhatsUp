@@ -27,7 +27,9 @@ class FirebaseDBViewModel(private val repository: FirebaseDB): ViewModel(){
     }
 
     fun sendMessage(messageModel: MessageModel){
-        repository.sendMessage(messageModel)
+        viewModelScope.launch {
+            repository.sendMessage(messageModel)
+        }
     }
     fun getMessageFlow(chatPhone: String, senderPhone:String){
         viewModelScope.launch {
@@ -61,7 +63,9 @@ class FirebaseDBViewModel(private val repository: FirebaseDB): ViewModel(){
     }
 
     fun uploadPhoto(uri: Uri){
-        repository.uploadImage(uri)
+        viewModelScope.launch {
+            repository.uploadImage(uri)
+        }
     }
 
 init {
