@@ -9,8 +9,6 @@ import com.example.whatsup.model.ContactsModel
 import com.example.whatsup.model.StatusDetails
 import com.example.whatsup.model.StatusModel
 import com.example.whatsup.model.User
-import com.google.firebase.database.DataSnapshot
-import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -25,10 +23,6 @@ class StatusViewModel(private val repository: StatusDao):ViewModel() {
     val statusBar: LiveData<Boolean> = repository.statusBar
     val contact: LiveData<List<ContactsModel>> = repository.users
 
-   fun getList(){
-       // repository.getList()
-    }
-
     fun getUserByPhone(){
         var sharedPreferences = repository.application.getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
         var phone = sharedPreferences.getString("phone","1")
@@ -39,24 +33,24 @@ class StatusViewModel(private val repository: StatusDao):ViewModel() {
             }
     }
 
-    fun upLoadStatus(uri: Uri){
+    fun upLoadStatus(uri: String?,text:String){
+        Log.i("UsersStatus","Upload------"+Uri.parse(uri).toString())
         viewModelScope.async {
-            repository.upLoadStatus(uri,_currentUser.value?.phoneNo.toString())
+            repository.upLoadStatus(Uri.parse(uri),_currentUser.value?.phoneNo.toString(),text)
         }
     }
 
     fun getStatus(phone:String){
-        viewModelScope.async {
-            repository.getStatus(phone).addOnCompleteListener{
-                var list = ArrayList<StatusModel>()
-                Log.i("StatusCheck","---------------------------------------------------------------------")
-                Log.i("StatusCheck0",it.result.childrenCount.toString())
-                for(i in it.result.children){
-                    list.add(i.getValue(StatusModel::class.java)!!)
+        viewModelScope.launch {
+            repository.getStatus(phone).collect{
+                when{
+                    it.isSuccess ->{
+                        _status.value = it.getOrNull()
+                    }
+                    it.isFailure -> {
+                        it.exceptionOrNull()?.printStackTrace()
+                    }
                 }
-                Log.i("StatusCheck1",list.size.toString())
-                _status.value = list
-                Log.i("StatusCheck2", (status.value as ArrayList<StatusModel>).size.toString())
             }
         }
     }
@@ -78,10 +72,6 @@ class StatusViewModel(private val repository: StatusDao):ViewModel() {
 
     fun setStatusSeen(phone: String,user:String){
         repository.setSeen(phone,user)
-    }
-
-    fun det(){
-        _status.value = ArrayList<StatusModel>()
     }
 }
 

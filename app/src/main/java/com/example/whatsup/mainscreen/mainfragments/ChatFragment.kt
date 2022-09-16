@@ -11,10 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whatsup.FirebaseAppliction
-import com.example.whatsup.R
 import com.example.whatsup.adapter.ChatsAdapter
 import com.example.whatsup.databinding.FragmentChatBinding
-import com.example.whatsup.model.UserData
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
 

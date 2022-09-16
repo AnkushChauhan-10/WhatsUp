@@ -17,11 +17,9 @@ import com.example.whatsup.FirebaseAppliction
 import com.example.whatsup.adapter.MessageAdapter
 import com.example.whatsup.databinding.FragmentOpenChatBinding
 import com.example.whatsup.model.MessageModel
-import com.example.whatsup.model.UserData
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
 import com.google.firebase.storage.FirebaseStorage
-import java.security.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 

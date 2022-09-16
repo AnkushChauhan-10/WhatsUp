@@ -6,8 +6,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.whatsup.mainscreen.mainfragments.CallsLogFragment
 import com.example.whatsup.mainscreen.mainfragments.ChatFragment
-import com.example.whatsup.mainscreen.mainfragments.ContactListFragment
 import com.example.whatsup.mainscreen.mainfragments.StatusFragment
+
 
 class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {

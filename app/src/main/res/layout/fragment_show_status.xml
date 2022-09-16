@@ -36,20 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/toolBar"/>
-    <ImageView
-        android:id="@+id/show_Status"
-        android:layout_width="match_parent"
-        android:layout_height="386dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bar" />
 
-    <TextView
-        android:id="@+id/statusText"
-        android:text="jhsdjashdk"
-        android:textAlignment="center"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/showStatusViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_Status" />
+        app:layout_constraintTop_toBottomOf="@id/bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -99,7 +99,7 @@ class StatusDao(val application: Application) {
 
     private val _statusBar = MutableLiveData<Boolean>()
     val statusBar : LiveData<Boolean> = _statusBar
-    suspend fun upLoadStatus(file: Uri,phone: String){
+    suspend fun upLoadStatus(file: Uri?, phone: String,text: String?){
         _statusBar.value = false
         GlobalScope.launch(Dispatchers.IO) {
             if(file != null){
@@ -107,7 +107,7 @@ class StatusDao(val application: Application) {
                     ?.child(keyGen())
                 ref?.putFile(file!!)?.onSuccessTask {
                     it.storage.downloadUrl.addOnSuccessListener {
-                        setStatus(it.toString(),phone,keyGen())
+                        setStatus(it.toString(),phone,keyGen(),text)
                         _statusBar.value = true
                     }
                 }
@@ -122,7 +122,7 @@ class StatusDao(val application: Application) {
         return ts.toString()
     }
 
-    private fun setStatus(uri: String,phone: String?,time:String) {
+    private fun setStatus(uri: String,phone: String?,time:String,text:String?) {
         GlobalScope.launch(Dispatchers.IO) {
 
             for(contact in users.value as List){
@@ -131,27 +131,38 @@ class StatusDao(val application: Application) {
             }
             var ref = database.getReference("Users").child(phone!!).child("Statuses").child("MyStatus")
             ref.child("status").child(time)
-                .setValue(StatusModel(uri,keyGen().toLong()," "))
+                .setValue(StatusModel(uri,keyGen().toLong(),text))
             ref.child("details")
                 .setValue(StatusDetails(phone,time,uri))
         }
     }
 
 
-    suspend fun getStatus(phone: String): Task<DataSnapshot> {
-        val job = GlobalScope.async{
-            Log.i("StatusCheck","getStatus")
-            database.getReference("Users").child(phone).child("Statuses").child("MyStatus").child("status")
-                .get()
+    suspend fun getStatus(phone: String) = callbackFlow<Result<List<StatusModel>>> {
+        val messageListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val status = snapshot.children.map { ds->
+                    ds.getValue(StatusModel::class.java)
+                }
+                Log.i("flowmss",status.toString())
+                this@callbackFlow.trySendBlocking(Result.success(status.filterNotNull()))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+            }
         }
-        return  job.await()
+        database.getReference("Users").child(phone).child("Statuses").child("MyStatus").child("status")
+            .addValueEventListener(messageListener)
+        awaitClose {
+            database.getReference("Users").child(phone).child("Statuses").child("MyStatus").child("status")
+                .removeEventListener(messageListener)
+        }
     }
 
     fun getStatusFlow(phone: String) = callbackFlow<Result<List<StatusDetails>>> {
-        var i=0
         val messageListener = object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.i("DATASNAP",i++.toString())
                 val status = snapshot.children.map { ds->
                     ds.getValue(StatusDetails::class.java)
                 }

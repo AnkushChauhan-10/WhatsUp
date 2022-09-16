@@ -1,7 +1,5 @@
 package com.example.whatsup.mainscreen.mainfragments
 
-import android.content.Context
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,34 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.annotation.Px
-import androidx.core.view.marginBottom
-import androidx.core.view.setMargins
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
+import androidx.viewpager2.widget.ViewPager2
 import com.example.whatsup.FirebaseAppliction
-import com.example.whatsup.R
+import com.example.whatsup.adapter.ShowStatusViewPagerAdapter
 import com.example.whatsup.databinding.FragmentShowStatusBinding
 import com.example.whatsup.model.StatusModel
 import com.example.whatsup.viewmodel.StatusViewModel
 import com.example.whatsup.viewmodel.StatusViewModelFactory
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class ShowStatusFragment : Fragment() {
 
     private lateinit var binding : FragmentShowStatusBinding
-    private  var currentProgressBar =  MutableLiveData<Int>()
     var i=0
 
+    private lateinit var viewpager : ViewPager2
     private val args : ShowStatusFragmentArgs by navArgs()
     private val progressBars = ArrayList<ProgressBar>()
     private val statusList = ArrayList<StatusModel>()
+    private lateinit var job : CoroutineContext
 
     private val viewModel : StatusViewModel by activityViewModels{
         StatusViewModelFactory(
@@ -55,7 +50,7 @@ class ShowStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getStatus(args.phone)
+        viewModel.getStatus(args.user)
         binding.showStatusName.text = args.name
         viewModel.status.observe(viewLifecycleOwner){
             Log.i("StatusCheck3",it.size.toString())
@@ -64,15 +59,7 @@ class ShowStatusFragment : Fragment() {
             statusList.clear()
             statusList.addAll(it)
             addProgressBar(it.size)
-        }
-        currentProgressBar.value = 0
-        currentProgressBar.observe(viewLifecycleOwner){
-            if(it<statusList.size){
-                setStatus()
-            }else{
-                viewModel.setStatusSeen(args.phone,args.user)
-               findNavController().popBackStack()
-            }
+            setStatus()
         }
     }
 
@@ -97,25 +84,51 @@ class ShowStatusFragment : Fragment() {
     }
 
     fun setStatus(){
-        Log.i("setStatus","Start"+currentProgressBar.value)
-        binding.statusText.text = statusList[currentProgressBar.value!!].text
-        Glide.with(requireContext()).load(statusList[currentProgressBar.value!!].uri).fitCenter().centerCrop()
-            .into(binding.showStatus)
-        startProgressBar()
+        viewpager = binding.showStatusViewPager
+        var adapter = ShowStatusViewPagerAdapter(requireContext())
+        viewpager.adapter = adapter
+        adapter.update(statusList)
+        viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Log.i("setStatus","Start")
+                try{
+                    job.cancel()
+                }catch (e:Exception){
+                    Toast.makeText(requireContext(),e.toString(),Toast.LENGTH_SHORT)
+                }
+                for(i in 0..progressBars.size-1){
+                    if(i<position){
+                        progressBars[i].progress = 1000
+                    }else{
+                        progressBars[i].progress = 0
+                    }
+                }
+                try{
+                startProgressBar(position)
+                }catch (e:Exception){
+                    Toast.makeText(requireContext(),e.toString(),Toast.LENGTH_SHORT)
+                }
+            }
+        })
     }
 
-    fun startProgressBar(){
-        lifecycleScope.launch {
-            run()
+    fun startProgressBar(position:Int){
+        job = lifecycleScope.launch {
+            run(position)
         }
     }
 
-    suspend fun run(){
+    suspend fun run(position:Int){
+        val ans = position+1
         for(j in 0..1000){
             delay(5)
-            progressBars[currentProgressBar.value!!].progress = j
+            progressBars[position].progress = j
         }
-        currentProgressBar.value = currentProgressBar.value!!+1
+        if(ans>=statusList.size){
+           back()
+        }
+       viewpager.setCurrentItem(ans)
     }
 
     override fun onDestroyView() {
@@ -125,7 +138,11 @@ class ShowStatusFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        job.cancel()
         Log.i("State","OnDestroye")
-        viewModel.det()
+    }
+
+    private fun back() {
+        findNavController().popBackStack()
     }
 }

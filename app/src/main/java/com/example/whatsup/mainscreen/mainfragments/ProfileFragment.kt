@@ -1,7 +1,6 @@
 package com.example.whatsup.mainscreen.mainfragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -21,12 +20,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.whatsup.FirebaseAppliction
-import com.example.whatsup.R
 import com.example.whatsup.databinding.FragmentProfileBinding
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
 

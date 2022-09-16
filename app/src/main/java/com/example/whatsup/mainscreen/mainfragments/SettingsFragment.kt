@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.whatsup.FirebaseAppliction
-import com.example.whatsup.R
 import com.example.whatsup.databinding.FragmentSettingsBinding
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
