@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.chatfragment
 
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.whatsup.R
 import com.example.whatsup.databinding.FragmentFullImageBinding
-import com.example.whatsup.databinding.FragmentProfileBinding
 import com.google.firebase.storage.FirebaseStorage
 
 class FullImageFragment : Fragment() {
@@ -47,6 +45,5 @@ class FullImageFragment : Fragment() {
         binding.showImageBack.setOnClickListener {
             findNavController().navigate(FullImageFragmentDirections.actionFullImageFragmentToDashBordFragment())
         }
-
     }
 }

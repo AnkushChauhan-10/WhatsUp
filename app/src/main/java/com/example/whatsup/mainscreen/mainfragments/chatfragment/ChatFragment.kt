@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.chatfragment
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whatsup.FirebaseAppliction
 import com.example.whatsup.adapter.ChatsAdapter
 import com.example.whatsup.databinding.FragmentChatBinding
+import com.example.whatsup.mainscreen.mainfragments.DashBordFragmentDirections
 import com.example.whatsup.viewmodel.FirebaseDBViewModel
 import com.example.whatsup.viewmodel.FirebaseDBViewModelFactory
 

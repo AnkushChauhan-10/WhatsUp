@@ -186,4 +186,9 @@ class StatusDao(val application: Application) {
         database.getReference("Users").child(phone).child("Statuses").child("others")
             .child(user).child("seen").setValue(true)
     }
+
+    fun deleteStatus(){
+
+    }
+
 }

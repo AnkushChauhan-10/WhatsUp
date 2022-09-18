@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.setting
 
 import android.os.Bundle
 import android.util.Log
@@ -42,6 +42,9 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.profileLayoutClick.setOnClickListener {
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToProfileFragment())
+        }
+        binding.settingBack.setOnClickListener {
+            findNavController().popBackStack()
         }
         val storageReference = FirebaseStorage.getInstance("gs://whats-up-1e69b.appspot.com")
             .getReference("${viewModel.currentUserData.value?.phoneNo.toString()}/DP")

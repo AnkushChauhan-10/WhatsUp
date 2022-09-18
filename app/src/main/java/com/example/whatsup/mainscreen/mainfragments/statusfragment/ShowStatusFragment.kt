@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.statusfragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.whatsup.FirebaseAppliction
 import com.example.whatsup.adapter.ShowStatusViewPagerAdapter
 import com.example.whatsup.databinding.FragmentShowStatusBinding
@@ -21,6 +22,8 @@ import com.example.whatsup.model.StatusModel
 import com.example.whatsup.viewmodel.StatusViewModel
 import com.example.whatsup.viewmodel.StatusViewModelFactory
 import kotlinx.coroutines.*
+import java.sql.Date
+import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
 class ShowStatusFragment : Fragment() {
@@ -51,6 +54,14 @@ class ShowStatusFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getStatus(args.user)
+        viewModel.getUser(args.user)
+        viewpager = binding.showStatusViewPager
+        viewModel.user.observe(viewLifecycleOwner){
+           if(it.profilepic!=""){
+                Glide.with(requireContext()).load(it.profilepic).fitCenter().centerCrop()
+                    .circleCrop().into(binding.showStatusDP)
+            }
+        }
         binding.showStatusName.text = args.name
         viewModel.status.observe(viewLifecycleOwner){
             Log.i("StatusCheck3",it.size.toString())
@@ -60,6 +71,9 @@ class ShowStatusFragment : Fragment() {
             statusList.addAll(it)
             addProgressBar(it.size)
             setStatus()
+        }
+        binding.showStatusBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -84,7 +98,6 @@ class ShowStatusFragment : Fragment() {
     }
 
     fun setStatus(){
-        viewpager = binding.showStatusViewPager
         var adapter = ShowStatusViewPagerAdapter(requireContext())
         viewpager.adapter = adapter
         adapter.update(statusList)
@@ -92,6 +105,12 @@ class ShowStatusFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 Log.i("setStatus","Start")
+
+                binding.showStatusTime.text = getTime(statusList[position].timeSpan.toString())
+
+                if(position == statusList.size-1){
+                    viewModel.setStatusSeen(args.phone,args.user)
+                }
                 try{
                     job.cancel()
                 }catch (e:Exception){
@@ -111,6 +130,10 @@ class ShowStatusFragment : Fragment() {
                 }
             }
         })
+        viewpager.setCurrentItem(args.position)
+        for(i in 0..args.position){
+            progressBars[i].progress = 1000
+        }
     }
 
     fun startProgressBar(position:Int){
@@ -145,4 +168,27 @@ class ShowStatusFragment : Fragment() {
     private fun back() {
         findNavController().popBackStack()
     }
+
+    private fun getTime(time :String):String{
+
+        var ans:String
+        var currentTime = System.currentTimeMillis()/1000
+
+        val dayFormat = SimpleDateFormat("EEE")
+        val timeFormat = SimpleDateFormat("hh:mm aaa")
+
+        val today = dayFormat.format(Date(currentTime.toString().toLong()*1000))
+        val timeStamp = dayFormat.format(Date(time.toLong()*1000))
+
+        Log.i("Today",(time.toLong()*1000).toString()+" and " + (System.currentTimeMillis()).toString())
+
+        if(today == timeStamp){
+            ans = "Today, " + timeFormat.format(Date(time.toLong()*1000)).toString()
+        }else{
+            ans = "Yesterday, " + timeFormat.format(Date(time.toLong()*1000)).toString()
+        }
+
+        return ans
+    }
+
 }

@@ -5,10 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.whatsup.firebaserpository.StatusDao
-import com.example.whatsup.model.ContactsModel
-import com.example.whatsup.model.StatusDetails
-import com.example.whatsup.model.StatusModel
-import com.example.whatsup.model.User
+import com.example.whatsup.model.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -23,14 +20,25 @@ class StatusViewModel(private val repository: StatusDao):ViewModel() {
     val statusBar: LiveData<Boolean> = repository.statusBar
     val contact: LiveData<List<ContactsModel>> = repository.users
 
+    private val _user = MutableLiveData<User>()
+    val user : LiveData<User> = _user
+
     fun getUserByPhone(){
         var sharedPreferences = repository.application.getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
-        var phone = sharedPreferences.getString("phone","1")
+        var phone = sharedPreferences?.getString("phone","1")
         viewModelScope.async{
             repository.getUserByPhone(phone.toString()).addOnCompleteListener {
                     _currentUser.value = it.result.getValue(User::class.java)
                 }
             }
+    }
+
+    fun getUser(phone: String){
+        viewModelScope.async {
+            repository.getUserByPhone(phone).addOnCompleteListener {
+                _user.value = it.result.getValue(User::class.java) as User
+            }
+        }
     }
 
     fun upLoadStatus(uri: String?,text:String){

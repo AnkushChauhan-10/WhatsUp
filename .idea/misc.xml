@@ -27,6 +27,7 @@
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_full_image.xml" value="0.10822401614530777" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_login.xml" value="0.2234375" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_login2.xml" value="0.20625" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_my_status.xml" value="0.12" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_open_chat.xml" value="0.152" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_profile.xml" value="0.2234375" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_set_status.xml" value="0.10400000000000001" />
@@ -37,6 +38,7 @@
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_sing_up.xml" value="0.20625" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_singup.xml" value="0.2234375" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_status.xml" value="0.4" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/my_status_view.xml" value="0.176" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/reciver_layout.xml" value="0.536" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/sender_layout.xml" value="0.4" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/show_full_image.xml" value="0.10822401614530777" />

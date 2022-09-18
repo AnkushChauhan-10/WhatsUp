@@ -4,9 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.whatsup.mainscreen.mainfragments.CallsLogFragment
-import com.example.whatsup.mainscreen.mainfragments.ChatFragment
-import com.example.whatsup.mainscreen.mainfragments.StatusFragment
+import com.example.whatsup.mainscreen.mainfragments.callfragment.CallsLogFragment
+import com.example.whatsup.mainscreen.mainfragments.chatfragment.ChatFragment
+import com.example.whatsup.mainscreen.mainfragments.statusfragment.StatusFragment
 
 
 class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {

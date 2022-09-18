@@ -2,20 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:padding="10dp"
+    android:background="@color/gray"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:id="@+id/status"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <LinearLayout
-        android:id="@+id/statusClick"
+        android:id="@+id/muStatusClick"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:id="@+id/statusImg"
+            android:id="@+id/myStatusPic"
             android:layout_marginEnd="5dp"
             android:src="@drawable/ic_baseline_perm_identity_24"
             android:background="@drawable/circuler_image_shape"
@@ -34,10 +30,10 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/statusUserName"
+                    android:id="@+id/totalView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sample"
+                    android:text="0 view"
                     android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -55,6 +51,21 @@
                     android:textColor="@color/black" />
             </RelativeLayout>
         </LinearLayout>
+        <ImageView
+            android:id="@+id/deleteMyStatus"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/myStatusLastText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="60dp"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        android:text="Your status updates will disappear after 24 hours."
+        android:textAlignment="center" />
 </LinearLayout>

@@ -75,15 +75,14 @@ class SetStatusActivity : AppCompatActivity() {
             if(Build.VERSION.SDK_INT >= 20){
                 val source = ImageDecoder.createSource(this.contentResolver,photoUri!!)
                 Glide.with(this).load(photoUri).into(binding.setStatusImage)
-                if(photoUri == null){
-                    finish()
-                }
             }else{
                 photo = MediaStore.Images.Media.getBitmap(this.contentResolver,photoUri)
-                if(photoUri == null){
-                    finish()
-                }
+
             }
+        }else{
+            var intent = Intent()
+            setResult(0,intent)
+            finish()
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

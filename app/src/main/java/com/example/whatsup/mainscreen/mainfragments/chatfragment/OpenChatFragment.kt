@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.chatfragment
 
 import android.os.Bundle
 import android.util.Log

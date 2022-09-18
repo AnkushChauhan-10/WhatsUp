@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.setting
 
 import android.app.Activity
 import android.content.Intent
@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.whatsup.FirebaseAppliction
 import com.example.whatsup.databinding.FragmentProfileBinding
@@ -65,6 +66,9 @@ class ProfileFragment : Fragment() {
         }
         binding.imageProfile.setOnClickListener {
             openGallery()
+        }
+        binding.profileBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

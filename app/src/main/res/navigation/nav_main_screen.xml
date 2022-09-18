@@ -26,10 +26,13 @@
         <action
             android:id="@+id/action_dashBordFragment_to_showStatusFragment"
             app:destination="@id/showStatusFragment" />
+        <action
+            android:id="@+id/action_dashBordFragment_to_myStatusFragment"
+            app:destination="@id/myStatusFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactListFragment"
-        android:name="com.example.whatsup.mainscreen.mainfragments.ContactListFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.chatfragment.ContactListFragment"
         android:label="fragment_contact_list"
         tools:layout="@layout/fragment_contact_list" >
         <action
@@ -40,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/openChatFragment2"
-        android:name="com.example.whatsup.mainscreen.mainfragments.OpenChatFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.chatfragment.OpenChatFragment"
         android:label="fragment_open_chat"
         tools:layout="@layout/fragment_open_chat" >
         <action
@@ -58,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.whatsup.mainscreen.mainfragments.SettingsFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.setting.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -67,12 +70,12 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.whatsup.mainscreen.mainfragments.ProfileFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.setting.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/fullImageFragment"
-        android:name="com.example.whatsup.mainscreen.mainfragments.FullImageFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.chatfragment.FullImageFragment"
         android:label="fragment_full_image"
         tools:layout="@layout/fragment_full_image" >
         <argument
@@ -89,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/showStatusFragment"
-        android:name="com.example.whatsup.mainscreen.mainfragments.ShowStatusFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.statusfragment.ShowStatusFragment"
         android:label="fragment_show_status"
         tools:layout="@layout/fragment_show_status" >
         <argument
@@ -106,5 +109,27 @@
         <argument
             android:name="user"
             app:argType="string" />
+        <argument
+            android:name="dp"
+            app:argType="string" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/myStatusFragment"
+        android:name="com.example.whatsup.mainscreen.mainfragments.statusfragment.MyStatusFragment"
+        android:label="fragment_my_status"
+        tools:layout="@layout/fragment_my_status" >
+        <argument
+            android:name="phone"
+            app:argType="string" />
+        <argument
+            android:name="dp"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_myStatusFragment_to_showStatusFragment"
+            app:destination="@id/showStatusFragment" />
     </fragment>
 </navigation>

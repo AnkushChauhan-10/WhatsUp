@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.statusfragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.example.whatsup.R
 import com.example.whatsup.adapter.StatusAdapter
 import com.example.whatsup.databinding.FragmentStatusBinding
 import com.example.whatsup.mainscreen.activity.SetStatusActivity
+import com.example.whatsup.mainscreen.mainfragments.DashBordFragmentDirections
 import com.example.whatsup.viewmodel.StatusViewModel
 import com.example.whatsup.viewmodel.StatusViewModelFactory
 
@@ -36,13 +38,13 @@ class StatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
        binding = FragmentStatusBinding.inflate(inflater)
+        viewModel.getUserByPhone()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.progressCircular.visibility = View.GONE
-        viewModel.getUserByPhone()
         viewModel.currentUser.observe(viewLifecycleOwner){
             viewModel.getStatus(it.phoneNo.toString())
             viewModel.getStatusFlow(it.phoneNo.toString())
@@ -53,21 +55,37 @@ class StatusFragment : Fragment() {
             setStatusRec()
         }
 
-        binding.setStatusLayout.setOnClickListener {
-            result()
-        }
         viewModel.statusBar.observe(viewLifecycleOwner){
             if(it){
                 binding.progressCircular.visibility = View.GONE
                 binding.sending.text = "Send"
             }
         }
-        viewModel.status.observe(viewLifecycleOwner){
-           // binding.addButtonImg.visibility = View.GONE
-            try{
-             //   binding.sending.text = it[it.size-1]!!.timeSpan.toString()
-              //  Glide.with(requireContext()).load(it[it.size-1]!!.uri.toString()).circleCrop().into(binding.statusProfile)
-            }catch (e:Exception){}
+        setMyStatusBinding()
+    }
+
+    private fun setMyStatusBinding() {
+        binding.statusProfile.setOnClickListener {
+            //navigateToShowStatus("My Status",viewModel.currentUser.value?.phoneNo.toString())
+            result()
+        }
+        binding.setStatusLayout.setOnClickListener {
+            findNavController().navigate(DashBordFragmentDirections.actionDashBordFragmentToMyStatusFragment(
+                viewModel.currentUser.value?.phoneNo.toString(),""))
+        }
+    }
+
+    private fun navigateToShowStatus(name:String,phone:String) {
+        try {
+            findNavController().navigate(
+                DashBordFragmentDirections.actionDashBordFragmentToShowStatusFragment(
+                    name.toString(),
+                    viewModel.currentUser.value?.phoneNo.toString(),
+                    phone.toString(),
+                    viewModel.currentUser.value?.profilepic.toString(),0
+                )
+            )
+        } catch (e: Exception) {
         }
     }
 
@@ -89,30 +107,28 @@ class StatusFragment : Fragment() {
     private fun setStatusRec() {
         val rec = binding.statusRec
         rec.layoutManager = LinearLayoutManager(requireContext())
-        var adapter = StatusAdapter(requireContext(),viewModel.contact.value as List)
+        var adapter = StatusAdapter(requireContext(), viewModel.contact.value as List)
         rec.adapter = adapter
-        viewModel.userPhone.observe(viewLifecycleOwner){
+        viewModel.userPhone.observe(viewLifecycleOwner) {
             adapter.upDate(it)
         }
-        adapter.setOnclick(object : StatusAdapter.ListAdapterListener{
+        adapter.setOnclick(object : StatusAdapter.ListAdapterListener {
             override fun onClickStatus(phone: String?, name: String?) {
                 try {
                     findNavController().navigate(
                         DashBordFragmentDirections.actionDashBordFragmentToShowStatusFragment(
                             name.toString(),
                             viewModel.currentUser.value?.phoneNo.toString(),
-                            phone.toString()
+                            phone.toString(),
+                            viewModel.currentUser.value?.profilepic.toString(),0
                         )
                     )
-                }catch (e:Exception){}
+                } catch (e: Exception) {
+                }
             }
 
         })
     }
-
-
-
-
 
     private fun uploadStatus(uri:String,text:String) {
         viewModel.upLoadStatus(uri,text)

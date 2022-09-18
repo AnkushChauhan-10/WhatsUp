@@ -1,4 +1,4 @@
-package com.example.whatsup.mainscreen.mainfragments
+package com.example.whatsup.mainscreen.mainfragments.callfragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
