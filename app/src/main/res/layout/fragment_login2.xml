@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/teal_700"
+    android:background="@color/prime"
     android:gravity="center"
     tools:context=".loginactivity.loginfragment.LoginFragment">
 
@@ -18,6 +18,9 @@
     <TextView
         android:id="@+id/haveAccountLogin"
         android:text="Have Account?"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

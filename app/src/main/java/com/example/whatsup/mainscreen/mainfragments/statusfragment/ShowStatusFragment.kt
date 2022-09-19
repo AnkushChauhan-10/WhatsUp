@@ -171,23 +171,20 @@ class ShowStatusFragment : Fragment() {
 
     private fun getTime(time :String):String{
 
-        var ans:String
+        var ans = SimpleDateFormat("dd/M/yyyy").format(Date(time.toLong()*1000)).toString()
+
         var currentTime = System.currentTimeMillis()/1000
+        val dateFormat = SimpleDateFormat("yyyyMdd")
 
-        val dayFormat = SimpleDateFormat("EEE")
-        val timeFormat = SimpleDateFormat("hh:mm aaa")
+        val today = dateFormat.format(Date(currentTime.toString().toLong()*1000)).toInt()
+        val timeStamp = dateFormat.format(Date(time.toLong()*1000)).toInt()
 
-        val today = dayFormat.format(Date(currentTime.toString().toLong()*1000))
-        val timeStamp = dayFormat.format(Date(time.toLong()*1000))
-
-        Log.i("Today",(time.toLong()*1000).toString()+" and " + (System.currentTimeMillis()).toString())
 
         if(today == timeStamp){
-            ans = "Today, " + timeFormat.format(Date(time.toLong()*1000)).toString()
-        }else{
-            ans = "Yesterday, " + timeFormat.format(Date(time.toLong()*1000)).toString()
+            ans = "Today, "+ SimpleDateFormat("hh:mm aaa").format(time.toLong()*1000)
+        }else if((today - timeStamp)==1){
+            ans = "Yesterday, "+ SimpleDateFormat("hh:mm aaa").format(time.toLong()*1000)
         }
-
         return ans
     }
 

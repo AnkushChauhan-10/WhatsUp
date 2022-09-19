@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.whatsup.R
 import com.example.whatsup.model.ContactsModel
 import com.example.whatsup.model.StatusModel
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 class MyStatusAdapter(private val context: Context):RecyclerView.Adapter<MyStatusAdapter.MyStatusHolder>() {
 
@@ -53,7 +55,7 @@ class MyStatusAdapter(private val context: Context):RecyclerView.Adapter<MyStatu
         holder.text.visibility = ViewGroup.GONE
         var currentStatus = allStatusList[position]
         Glide.with(context).load(currentStatus.uri).centerCrop().circleCrop().into(holder.img)
-        holder.time.text = currentStatus.timeSpan.toString()
+        holder.time.text = getDate(currentStatus.timeSpan.toString())
         if(position == allStatusList.size-1){
             holder.text.visibility = ViewGroup.VISIBLE
         }
@@ -68,6 +70,25 @@ class MyStatusAdapter(private val context: Context):RecyclerView.Adapter<MyStatu
         allStatusList.clear()
         allStatusList.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    private fun getDate(time :String):String{
+
+        var ans = SimpleDateFormat("dd/M/yyyy").format(Date(time.toLong()*1000)).toString()
+
+        var currentTime = System.currentTimeMillis()/1000
+        val dateFormat = SimpleDateFormat("yyyyMdd")
+
+        val today = dateFormat.format(Date(currentTime.toString().toLong()*1000)).toInt()
+        val timeStamp = dateFormat.format(Date(time.toLong()*1000)).toInt()
+
+
+        if(today == timeStamp){
+            ans = "Today, "+ SimpleDateFormat("hh:mm aaa").format(time.toLong()*1000)
+        }else if((today - timeStamp)==1){
+            ans = "Yesterday, "+ SimpleDateFormat("hh:mm aaa").format(time.toLong()*1000)
+        }
+        return ans
     }
 
 }

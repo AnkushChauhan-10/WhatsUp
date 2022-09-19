@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@color/teal_200"
+    android:background="@color/prime"
     android:layout_height="match_parent"
     tools:context=".mainscreen.mainfragments.DashBordFragment">
 
@@ -22,12 +22,12 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Whats Up"
-              android:textColor="@color/teal_700"
+              android:textColor="@color/white"
               android:textSize="30dp" />
           <ImageButton
               android:id="@+id/setting_button"
               android:src="@drawable/ic_baseline_more_vert_24"
-              android:background="@color/teal_200"
+              android:background="@color/prime"
               android:layout_width="wrap_content"
               android:layout_alignParentEnd="true"
               android:layout_marginEnd="5dp"
@@ -37,33 +37,34 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        android:background="@color/teal_200"
-        app:tabSelectedTextColor="@color/black"
+        android:background="@color/prime"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/black"
-            android:text="Chat" />
+            android:outlineAmbientShadowColor="@color/white"
+            android:text="Chat"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/black"
+            android:outlineAmbientShadowColor="@color/white"
             android:text="Status" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/black"
+            android:outlineAmbientShadowColor="@color/white"
             android:text="Calls" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:background="@color/gray"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

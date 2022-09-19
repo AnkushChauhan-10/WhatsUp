@@ -47,6 +47,9 @@ class ContactListFragment : Fragment() {
 
         rec.adapter = adapter
 
+        binding.contactBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_CONTACTS)
             == PackageManager.PERMISSION_GRANTED) {

@@ -111,18 +111,11 @@ class OpenChatFragment : Fragment() {
             viewModel.currentUserData.value?.phoneNo.toString(),
             args.chateName,
             args.chatePhone,
-            getCurrentDateTime(),
+            keyGen(),
             binding.textBox.text.toString(),
         false,
         keyGen()))
         binding.textBox.text.clear()
-    }
-
-    fun getCurrentDateTime(): String{
-        val calendar = Calendar.getInstance()
-        val simpleDateFormat = SimpleDateFormat("hh:mm aaa")
-        val dateTime = simpleDateFormat.format(calendar.time).toString()
-        return dateTime
     }
 
     fun keyGen():String{
@@ -130,5 +123,4 @@ class OpenChatFragment : Fragment() {
         Log.i("TimeStamp key",ts.toString())
         return ts.toString()
     }
-
 }

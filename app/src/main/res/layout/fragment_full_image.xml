@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray"
+        android:background="@color/prime"
         app:layout_constraintTop_toTopOf="parent">
         <ImageView
             android:id="@+id/showImageBack"

@@ -3,10 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/circuler_image_shape.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_keyboard_backspace_24.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_perm_identity_24.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_eye_not_seen.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_eye_seen.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1685" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/ic_outline_cancel_24.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/message_box_shape.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/message_count_circle.xml" value="0.1685" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/drawable/reciver_chat_bg.xml" value="0.1685" />
@@ -22,7 +32,7 @@
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/contact_view.xml" value="0.2" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_calls_log.xml" value="0.20625" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_chat.xml" value="0.20625" />
-        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_contact_list.xml" value="0.10822401614530777" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_contact_list.xml" value="0.136" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_dash_bord.xml" value="0.2" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_full_image.xml" value="0.10822401614530777" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_login.xml" value="0.2234375" />
@@ -38,6 +48,7 @@
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_sing_up.xml" value="0.20625" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_singup.xml" value="0.2234375" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/fragment_status.xml" value="0.4" />
+        <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/message_date_view.xml" value="0.264" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/my_status_view.xml" value="0.176" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/reciver_layout.xml" value="0.536" />
         <entry key="..\:/Projects/Android/WhatsUp/app/src/main/res/layout/sender_layout.xml" value="0.4" />

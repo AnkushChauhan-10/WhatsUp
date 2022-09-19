@@ -2,19 +2,47 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/teal_700"
+    android:background="@color/white"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".mainscreen.mainfragments.chatfragment.ContactListFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/prime"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:background="@color/prime"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:id="@+id/contactBack"
+                android:src="@drawable/ic_baseline_keyboard_backspace_24"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+            <TextView
+                android:text="Select Contact"
+                android:textSize="24dp"
+                android:textColor="@color/white"
+                android:layout_marginStart="40dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
     <TextView
         android:id="@+id/textContact"
         android:text="Contacts on WhatsUp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactRecycleView"

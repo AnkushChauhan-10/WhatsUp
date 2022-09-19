@@ -10,7 +10,7 @@
        android:id="@+id/myStatusBar"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:background="@color/teal_700"
+       android:background="@color/prime"
        app:layout_constraintTop_toTopOf="parent">
       <LinearLayout
           android:orientation="horizontal"
@@ -26,6 +26,7 @@
          <TextView
              android:text="My Status"
              android:textSize="28dp"
+             android:textColor="@color/white"
              android:layout_marginStart="10dp"
              android:textStyle="bold"
              android:layout_width="wrap_content"
